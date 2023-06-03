@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_notify/blocs/current_weather/weather_bloc.dart';
 import 'package:weather_notify/blocs/hourly_weather/hourly_weather_bloc.dart';
+import 'package:weather_notify/blocs/weekly_weather/weekly_weather_bloc.dart';
 import 'package:weather_notify/presentation/widgets/DailyVisual.dart';
 import 'package:weather_notify/presentation/widgets/Section.dart';
 
@@ -36,7 +37,10 @@ class WeatherPage extends StatelessWidget {
           ),
           Section(
               flex: 4,
-              child: WeeklyWeather()
+              child: BlocProvider(
+                create: (context) => WeeklyWeatherBloc(),
+                child: WeeklyWeather(),
+              )
           )
         ],
       ),

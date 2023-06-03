@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_notify/blocs/current_weather/weather_bloc.dart';
 import 'package:weather_notify/blocs/hourly_weather/hourly_weather_bloc.dart';
+import 'package:weather_notify/blocs/weekly_weather/weekly_weather_bloc.dart';
 import 'package:weather_notify/data/models/CurrentWeatherModel.dart';
 import 'package:weather_notify/data/repositories/WeatherRepository.dart';
 import 'package:weather_notify/injection.dart';
@@ -32,6 +33,9 @@ class WeatherNotifyApp extends StatelessWidget {
             ),
             BlocProvider(
               create: (context) => HourlyWeatherBloc(),
+            ),
+            BlocProvider(
+              create: (context) => WeeklyWeatherBloc(),
             ),
           ],
           child: WeatherPage(),

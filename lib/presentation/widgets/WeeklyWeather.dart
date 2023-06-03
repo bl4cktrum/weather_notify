@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:weather_notify/data/repositories/WeatherRepository.dart';
+import 'package:weather_notify/blocs/weekly_weather/weekly_weather_bloc.dart';
 import 'package:weather_notify/domain/entities/DayWeatherWithDate.dart';
 
-import '../../injection.dart';
-
-class WeeklyWeather extends StatefulWidget {
+class WeeklyWeather extends StatelessWidget {
   const WeeklyWeather({Key? key}) : super(key: key);
 
   @override
-  State<WeeklyWeather> createState() => _WeeklyWeatherState();
-}
-
-class _WeeklyWeatherState extends State<WeeklyWeather> {
-  @override
   Widget build(BuildContext context) {
+    final _weeklyWeatherBloc = BlocProvider.of<WeeklyWeatherBloc>(context);
+    _weeklyWeatherBloc.add(FetchWeeklyWeatherEvent(cityName: 'eskisehir'));
+
     return Padding(
         padding: const EdgeInsets.fromLTRB(0, 8, 0, 10),
       child: Column( children: [
@@ -38,11 +35,16 @@ class _WeeklyWeatherState extends State<WeeklyWeather> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: FutureBuilder<List<DayWeatherWithDate>>(
-              future: locator<WeatherRepository>().getForecastDays('eskisehir'),
-              builder: (context, snapshot) {
-                if(snapshot.hasData){
-                  List<DayWeatherWithDate> _dayList = snapshot.data!;
+            child: BlocBuilder(
+              bloc: _weeklyWeatherBloc,
+              builder: (context, WeeklyWeatherState state) {
+                if (state is WeeklyWeatherLoadingState){
+                  return Container(
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(color: Colors.black));
+                }
+                else if(state is WeeklyWeatherLoadedState){
+                  List<DayWeatherWithDate> _dayList = state.weeklyWeathers;
                   return ListView.builder(shrinkWrap: true,itemCount: _dayList
                       .length,
                   padding: EdgeInsets.symmetric(vertical: 0),
@@ -68,13 +70,11 @@ class _WeeklyWeatherState extends State<WeeklyWeather> {
                     );
                   });
                 }
-                else if (snapshot.hasError){
+                else if (state is WeeklyWeatherErrorState){
                   return Center(child: Text('Fetch failed!'),);
                 }
                 else {
-                  return Container(
-                    alignment: Alignment.center,
-                      child: CircularProgressIndicator(color: Colors.black));
+                  return const Text("No widget to build");
                 }
               },
             ),

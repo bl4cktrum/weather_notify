@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:weather_notify/blocs/current_weather/weather_bloc.dart';
 import 'package:weather_notify/data/constants.dart';
 import 'package:weather_notify/domain/entities/CurrentWeather.dart';
+import 'package:weather_notify/injection.dart';
 
 class DailyVisual extends StatelessWidget {
   const DailyVisual({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _weatherBloc = BlocProvider.of<WeatherBloc>(context);
-    _weatherBloc.add(FetchCurrentWeatherEvent(cityName: 'eskisehir'));
-
+    final _weatherBloc = locator<WeatherBloc>();
     return BlocBuilder(
-      bloc:_weatherBloc,
+      bloc: _weatherBloc,
       builder: (context, WeatherState state) {
         if  (state is CurrentWeatherLoadingState){
           return Container(
@@ -48,7 +46,7 @@ class DailyVisual extends StatelessWidget {
                   left: 24,
                   child: Text(
                     currentWeather.condition!.text!,
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                   ),
                 ),
                 Positioned(
@@ -67,15 +65,15 @@ class DailyVisual extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Text(
+                        const Text(
                           '°',
                           style: TextStyle(
                             fontSize: 64,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 4),
                           child: Text(
                             'C',
                             style: TextStyle(
@@ -92,17 +90,11 @@ class DailyVisual extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(DateFormat('EEEE')
-                          .format(DateTime.parse(currentWeather.date!)),
-                          style: TextStyle(
+                      Text(currentWeather.region!,
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                           )),
-                      // Text("test",
-                      //     style: TextStyle(
-                      //       fontSize: 24,
-                      //       fontWeight: FontWeight.bold,
-                      //     ))
                     ],
                   ),
                 )
@@ -111,12 +103,12 @@ class DailyVisual extends StatelessWidget {
           );
         }
         else if (state is CurrentWeatherErrorState) {
-          return Center(
+          return const Center(
             child: Text('Fetch failed!'),
           );
         }
         else {
-          return Text("No widget to build");
+          return const Text("No widget to build");
         }
       },
     );

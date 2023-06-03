@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_notify/blocs/weekly_weather/weekly_weather_bloc.dart';
 import 'package:weather_notify/domain/entities/DayWeatherWithDate.dart';
+import 'package:weather_notify/injection.dart';
 
 class WeeklyWeather extends StatelessWidget {
   const WeeklyWeather({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _weeklyWeatherBloc = BlocProvider.of<WeeklyWeatherBloc>(context);
-    _weeklyWeatherBloc.add(FetchWeeklyWeatherEvent(cityName: 'eskisehir'));
+    final _weeklyWeatherBloc = locator<WeeklyWeatherBloc>();
 
     return Padding(
         padding: const EdgeInsets.fromLTRB(0, 8, 0, 10),
@@ -26,9 +26,6 @@ class WeeklyWeather extends StatelessWidget {
             child: const ListTile(
               title: Text("Weekly Reports",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
-              trailing: Text("Eskisehir",
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)
-              ),
             ),
           ),
         ),
@@ -41,13 +38,13 @@ class WeeklyWeather extends StatelessWidget {
                 if (state is WeeklyWeatherLoadingState){
                   return Container(
                       alignment: Alignment.center,
-                      child: CircularProgressIndicator(color: Colors.black));
+                      child: const CircularProgressIndicator(color: Colors.black));
                 }
                 else if(state is WeeklyWeatherLoadedState){
                   List<DayWeatherWithDate> _dayList = state.weeklyWeathers;
                   return ListView.builder(shrinkWrap: true,itemCount: _dayList
                       .length,
-                  padding: EdgeInsets.symmetric(vertical: 0),
+                  padding: const EdgeInsets.symmetric(vertical: 0),
                   itemBuilder: (context, index) {
                     DayWeatherWithDate day = _dayList[index];
                     return Card(
@@ -65,13 +62,13 @@ class WeeklyWeather extends StatelessWidget {
                             .toString()),
                         trailing: Text(DateFormat('EEEE').format
                           (DateTime.parse(day.date!))),
-                        visualDensity: VisualDensity(vertical: -4),
+                        visualDensity: const VisualDensity(vertical: -4),
                       ),
                     );
                   });
                 }
                 else if (state is WeeklyWeatherErrorState){
-                  return Center(child: Text('Fetch failed!'),);
+                  return const Center(child: Text('Fetch failed!'),);
                 }
                 else {
                   return const Text("No widget to build");

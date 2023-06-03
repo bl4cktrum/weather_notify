@@ -3,15 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_notify/blocs/hourly_weather/hourly_weather_bloc.dart';
 import 'package:weather_notify/domain/entities/HourDetail.dart';
+import 'package:weather_notify/injection.dart';
 
 class HourlyWeathers extends StatelessWidget {
   const HourlyWeathers({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _hourlyWeatherBloc = BlocProvider.of<HourlyWeatherBloc>(context);
-    _hourlyWeatherBloc.add(FetchHourlyWeatherEvent(cityName: 'eskisehir'));
-
+    final _hourlyWeatherBloc = locator<HourlyWeatherBloc>();
     return Container(
       child: BlocBuilder(
         bloc: _hourlyWeatherBloc,

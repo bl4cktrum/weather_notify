@@ -6,20 +6,16 @@ import 'package:weather_notify/data/repositories/WeatherRepository.dart';
 final locator = GetIt.instance;
 
 void init() {
-  // external
+  // Must be first
   locator.registerLazySingleton(() => http.Client());
 
   // data source
+  locator.registerLazySingleton(() => WeatherDataSource(client: locator()));
+
+  // Must be last
   locator.registerLazySingleton(
-          () => WeatherDataSource(
-          client: locator()
-      )
-  );
-  // repository
-  locator.registerLazySingleton(
-        () => WeatherRepository(
+    () => WeatherRepository(
       weatherDataSource: locator(),
     ),
   );
 }
-

@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_notify/blocs/weather/weather_bloc.dart';
 import 'package:weather_notify/data/constants.dart';
-import 'package:weather_notify/data/repositories/WeatherRepository.dart';
 import 'package:weather_notify/domain/entities/CurrentWeather.dart';
-import 'package:weather_notify/injection.dart';
 
 class DailyVisual extends StatelessWidget {
   const DailyVisual({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<CurrentWeather>(
-      future: locator<WeatherRepository>()
-          .getCurrentWeatherAsViewModel('eskisehir'),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          CurrentWeather currentWeather = snapshot.data!;
+    final _weatherBloc = BlocProvider.of<WeatherBloc>(context);
+    _weatherBloc.add(FetchCurrentWeatherEvent(cityName: 'eskisehir'));
+
+    return BlocBuilder(
+      bloc:_weatherBloc,
+      builder: (context, WeatherState state) {
+        if  (state is WeatherLoadingState){
+          return Container(
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(color: Colors.black));
+        }
+        if (state is WeatherLoadedState) {
+          CurrentWeather currentWeather = state.currentWeather;
           return Card(
             color: AppColors.cardColor,
             shape: RoundedRectangleBorder(
@@ -81,35 +88,35 @@ class DailyVisual extends StatelessWidget {
                     )),
                 Positioned(
                   right: 12,
-                    bottom: 16,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(DateFormat('EEEE')
-                                .format(DateTime.parse(currentWeather.date!)),
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        // Text("test",
-                        //     style: TextStyle(
-                        //       fontSize: 24,
-                        //       fontWeight: FontWeight.bold,
-                        //     ))
-                      ],
-                    ),
+                  bottom: 16,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(DateFormat('EEEE')
+                          .format(DateTime.parse(currentWeather.date!)),
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      // Text("test",
+                      //     style: TextStyle(
+                      //       fontSize: 24,
+                      //       fontWeight: FontWeight.bold,
+                      //     ))
+                    ],
+                  ),
                 )
               ],
             ),
           );
-        } else if (snapshot.hasError) {
+        }
+        else if (state is WeatherErrorState) {
           return Center(
             child: Text('Fetch failed!'),
           );
-        } else {
-          return Container(
-              alignment: Alignment.center,
-              child: CircularProgressIndicator(color: Colors.black));
+        }
+        else {
+          return Text("No widget to build");
         }
       },
     );

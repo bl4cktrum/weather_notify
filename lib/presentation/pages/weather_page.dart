@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weather_notify/blocs/weather/weather_bloc.dart';
+import 'package:weather_notify/blocs/current_weather/weather_bloc.dart';
 import 'package:weather_notify/presentation/widgets/DailyVisual.dart';
 import 'package:weather_notify/presentation/widgets/Section.dart';
 

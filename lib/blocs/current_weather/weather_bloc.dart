@@ -12,20 +12,14 @@ part 'weather_state.dart';
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final WeatherRepository weatherRepository = locator<WeatherRepository>();
 
-  WeatherBloc() : super(WeatherInitialState()) {
-    /*
-    on<WeatherEvent>((event, emit) {
-      // TO_DO: implement event handler
-    });
-    */
-
+  WeatherBloc() : super(CurrentWeatherInitialState()) {
     on<FetchCurrentWeatherEvent>((event, emit) async {
-      emit(WeatherLoadingState());
+      emit(CurrentWeatherLoadingState());
       try {
         CurrentWeather currentWeather = await weatherRepository.getCurrentWeatherAsViewModel(event.cityName);
-        emit(WeatherLoadedState(currentWeather: currentWeather));
+        emit(CurrentWeatherLoadedState(currentWeather: currentWeather));
       } catch(e){
-        emit(WeatherErrorState());
+        emit(CurrentWeatherErrorState());
       }
     });
   }

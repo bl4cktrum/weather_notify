@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:weather_notify/blocs/weather/weather_bloc.dart';
+import 'package:weather_notify/blocs/current_weather/weather_bloc.dart';
 import 'package:weather_notify/data/constants.dart';
 import 'package:weather_notify/domain/entities/CurrentWeather.dart';
 
@@ -16,12 +16,12 @@ class DailyVisual extends StatelessWidget {
     return BlocBuilder(
       bloc:_weatherBloc,
       builder: (context, WeatherState state) {
-        if  (state is WeatherLoadingState){
+        if  (state is CurrentWeatherLoadingState){
           return Container(
               alignment: Alignment.center,
               child: CircularProgressIndicator(color: Colors.black));
         }
-        if (state is WeatherLoadedState) {
+        if (state is CurrentWeatherLoadedState) {
           CurrentWeather currentWeather = state.currentWeather;
           return Card(
             color: AppColors.cardColor,
@@ -110,7 +110,7 @@ class DailyVisual extends StatelessWidget {
             ),
           );
         }
-        else if (state is WeatherErrorState) {
+        else if (state is CurrentWeatherErrorState) {
           return Center(
             child: Text('Fetch failed!'),
           );

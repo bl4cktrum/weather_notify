@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weather_notify/blocs/weather/weather_bloc.dart';
+import 'package:weather_notify/blocs/current_weather/weather_bloc.dart';
 import 'package:weather_notify/data/models/CurrentWeatherModel.dart';
 import 'package:weather_notify/data/repositories/WeatherRepository.dart';
 import 'package:weather_notify/injection.dart';
@@ -9,7 +9,7 @@ import 'package:weather_notify/presentation/pages/weather_page.dart';
 import 'data/constants.dart';
 
 void main() {
-  init();
+  injectionContainerInit();
   runApp(WeatherNotifyApp());
 }
 

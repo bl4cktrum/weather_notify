@@ -38,13 +38,13 @@ class WeeklyWeather extends StatelessWidget {
                 if (state is WeeklyWeatherLoadingState){
                   return Container(
                       alignment: Alignment.center,
-                      child: CircularProgressIndicator(color: Colors.black));
+                      child: const CircularProgressIndicator(color: Colors.black));
                 }
                 else if(state is WeeklyWeatherLoadedState){
                   List<DayWeatherWithDate> _dayList = state.weeklyWeathers;
                   return ListView.builder(shrinkWrap: true,itemCount: _dayList
                       .length,
-                  padding: EdgeInsets.symmetric(vertical: 0),
+                  padding: const EdgeInsets.symmetric(vertical: 0),
                   itemBuilder: (context, index) {
                     DayWeatherWithDate day = _dayList[index];
                     return Card(
@@ -62,13 +62,13 @@ class WeeklyWeather extends StatelessWidget {
                             .toString()),
                         trailing: Text(DateFormat('EEEE').format
                           (DateTime.parse(day.date!))),
-                        visualDensity: VisualDensity(vertical: -4),
+                        visualDensity: const VisualDensity(vertical: -4),
                       ),
                     );
                   });
                 }
                 else if (state is WeeklyWeatherErrorState){
-                  return Center(child: Text('Fetch failed!'),);
+                  return const Center(child: Text('Fetch failed!'),);
                 }
                 else {
                   return const Text("No widget to build");

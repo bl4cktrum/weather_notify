@@ -106,7 +106,7 @@ class WeatherPage extends StatelessWidget {
                         .add(FetchHourlyWeatherEvent(cityName: cityName));
 
                     (await SharedPreferences.getInstance()).setString('city', cityName);
-                    Navigator.of(context).pop(); // Dialog kutusunu kapat
+                    Navigator.of(context).pop();
                   },
                 ),
               ],

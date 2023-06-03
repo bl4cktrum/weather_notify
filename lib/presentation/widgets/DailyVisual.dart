@@ -46,7 +46,7 @@ class DailyVisual extends StatelessWidget {
                   left: 24,
                   child: Text(
                     currentWeather.condition!.text!,
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                   ),
                 ),
                 Positioned(
@@ -65,15 +65,15 @@ class DailyVisual extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Text(
+                        const Text(
                           '°',
                           style: TextStyle(
                             fontSize: 64,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 4),
                           child: Text(
                             'C',
                             style: TextStyle(
@@ -91,21 +91,10 @@ class DailyVisual extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(currentWeather.region!,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                           )),
-                      // Text(DateFormat('EEEE')
-                      //     .format(DateTime.parse(currentWeather.date!)),
-                      //     style: TextStyle(
-                      //       fontSize: 22,
-                      //       fontWeight: FontWeight.bold,
-                      //     )),
-                      // Text("test",
-                      //     style: TextStyle(
-                      //       fontSize: 24,
-                      //       fontWeight: FontWeight.bold,
-                      //     ))
                     ],
                   ),
                 )
@@ -114,12 +103,12 @@ class DailyVisual extends StatelessWidget {
           );
         }
         else if (state is CurrentWeatherErrorState) {
-          return Center(
+          return const Center(
             child: Text('Fetch failed!'),
           );
         }
         else {
-          return Text("No widget to build");
+          return const Text("No widget to build");
         }
       },
     );

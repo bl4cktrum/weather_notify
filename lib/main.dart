@@ -55,7 +55,7 @@ class _WeatherNotifyAppState extends State<WeatherNotifyApp> {
               )
             : Container(
                 alignment: Alignment.center,
-                child: CircularProgressIndicator(color: Colors.black)),
+                child: const CircularProgressIndicator(color: Colors.black)),
       ),
     );
   }

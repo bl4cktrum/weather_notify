@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_notify/blocs/current_weather/weather_bloc.dart';
 import 'package:weather_notify/blocs/hourly_weather/hourly_weather_bloc.dart';
 import 'package:weather_notify/blocs/weekly_weather/weekly_weather_bloc.dart';
@@ -13,7 +14,23 @@ void main() {
   runApp(WeatherNotifyApp());
 }
 
-class WeatherNotifyApp extends StatelessWidget {
+class WeatherNotifyApp extends StatefulWidget {
+  @override
+  State<WeatherNotifyApp> createState() => _WeatherNotifyAppState();
+}
+
+class _WeatherNotifyAppState extends State<WeatherNotifyApp> {
+  late SharedPreferences preferences;
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((sp) {
+      preferences = sp;
+      preferences.setString('city', 'eskisehir');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

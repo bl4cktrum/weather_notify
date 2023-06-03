@@ -12,7 +12,7 @@ class DailyVisual extends StatelessWidget {
   Widget build(BuildContext context) {
     final _weatherBloc = BlocProvider.of<WeatherBloc>(context);
     _weatherBloc.add(FetchCurrentWeatherEvent(cityName: 'eskisehir'));
-// init state
+
     return BlocBuilder(
       bloc:_weatherBloc,
       builder: (context, WeatherState state) {
@@ -48,7 +48,7 @@ class DailyVisual extends StatelessWidget {
                   left: 24,
                   child: Text(
                     currentWeather.condition!.text!,
-                    style: TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                   ),
                 ),
                 Positioned(
@@ -88,14 +88,14 @@ class DailyVisual extends StatelessWidget {
                     )),
                 Positioned(
                   right: 12,
-                  bottom: 16,
+                  bottom: 8,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(DateFormat('EEEE')
                           .format(DateTime.parse(currentWeather.date!)),
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
                           )),
                       // Text("test",

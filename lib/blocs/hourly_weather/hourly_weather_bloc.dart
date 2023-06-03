@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:weather_notify/data/repositories/WeatherRepository.dart';
-import 'package:weather_notify/domain/entities/HourlyWeather.dart';
+import 'package:weather_notify/domain/entities/HourDetail.dart';
 import 'package:weather_notify/injection.dart';
 
 part 'hourly_weather_event.dart';
@@ -14,8 +14,8 @@ class HourlyWeatherBloc extends Bloc<HourlyWeatherEvent, HourlyWeatherState> {
     on<FetchHourlyWeatherEvent>((event, emit) async {
       emit(HourlyWeatherLoadingState());
       try {
-        HourlyWeather hourlyWeather = await weatherRepository.getHourlyWeatherAsViewModel(event.cityName);
-        emit(HourlyWeatherLoadedState(hourlyWeather: hourlyWeather));
+        List<HourDetail> hourlyWeathers = await weatherRepository.getHourlyWeathersAsViewModel(event.cityName);
+        emit(HourlyWeatherLoadedState(hourlyWeathers: hourlyWeathers));
       } catch(e){
         emit(HourlyWeatherErrorState());
       }

@@ -4,8 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:weather_notify/blocs/hourly_weather/hourly_weather_bloc.dart';
 import 'package:weather_notify/domain/entities/HourDetail.dart';
 
-import '../../domain/entities/HourlyWeather.dart';
-
 class HourlyWeathers extends StatelessWidget {
   const HourlyWeathers({Key? key}) : super(key: key);
 
@@ -24,18 +22,7 @@ class HourlyWeathers extends StatelessWidget {
                 child: CircularProgressIndicator(color: Colors.black));
           }
           else if (state is HourlyWeatherLoadedState) {
-            HourlyWeather _hourlyWeather = state.hourlyWeather;
-            List<HourDetail> _hourDetails = [];
-            _hourlyWeather.forecast!.forecastday!.first.hour!
-                .forEach((element) {
-              if (DateTime.now().compareTo(DateTime.parse(element.time!)) < 0) {
-                _hourDetails.add(HourDetail(
-                    element.time!,
-                    element.condition!.icon!,
-                    element.tempC!,
-                    element.condition!.code!));
-              };
-            });
+            List<HourDetail> _hourDetails = state.hourlyWeathers;
             return ListView.builder(
                 shrinkWrap: true,
                 itemCount: _hourDetails.length,

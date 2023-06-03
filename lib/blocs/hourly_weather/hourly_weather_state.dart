@@ -10,8 +10,8 @@ class HourlyWeatherInitialState extends HourlyWeatherState {}
 class HourlyWeatherLoadingState extends HourlyWeatherState {}
 
 class HourlyWeatherLoadedState extends HourlyWeatherState {
-  final HourlyWeather hourlyWeather;
-  const HourlyWeatherLoadedState({required this.hourlyWeather});
+  final List<HourDetail> hourlyWeathers;
+  const HourlyWeatherLoadedState({required this.hourlyWeathers});
 }
 
 class HourlyWeatherErrorState extends HourlyWeatherState {}

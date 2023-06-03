@@ -2,6 +2,7 @@ import 'package:weather_notify/data/models/CurrentWeatherModel.dart';
 import 'package:weather_notify/data/models/ForecastWeatherModel.dart';
 import 'package:weather_notify/data/models/HourlyWeatherModel.dart';
 import 'package:weather_notify/domain/entities/DayWeatherWithDate.dart';
+import 'package:weather_notify/domain/entities/HourDetail.dart';
 import 'package:weather_notify/domain/entities/HourlyWeather.dart';
 
 import '../../domain/entities/CurrentWeather.dart';
@@ -43,9 +44,20 @@ class WeatherRepository {
         .toList();
   }
 
-  Future<HourlyWeather> getHourlyWeatherAsViewModel(String cityName) async {
-    HourlyWeatherModel hourlyWeatherModel = await getHourlyWeather(cityName);
-    return hourlyWeatherModel.toHourlyWeather();
+  Future<List<HourDetail>> getHourlyWeathersAsViewModel(String cityName) async {
+    HourlyWeather _hourlyWeather = (await getHourlyWeather(cityName)).toHourlyWeather();
+    List<HourDetail> _hourDetails = [];
+    _hourlyWeather.forecast!.forecastday!.first.hour!
+        .forEach((element) {
+      if (DateTime.now().compareTo(DateTime.parse(element.time!)) < 0) {
+        _hourDetails.add(HourDetail(
+            element.time!,
+            element.condition!.icon!,
+            element.tempC!,
+            element.condition!.code!));
+      };
+    });
+    return _hourDetails;
   }
 
   Future<HourlyWeatherModel> getHourlyWeather(String cityName) async {

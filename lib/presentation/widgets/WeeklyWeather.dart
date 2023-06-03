@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_notify/blocs/weekly_weather/weekly_weather_bloc.dart';
 import 'package:weather_notify/domain/entities/DayWeatherWithDate.dart';
+import 'package:weather_notify/injection.dart';
 
 class WeeklyWeather extends StatelessWidget {
   const WeeklyWeather({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _weeklyWeatherBloc = BlocProvider.of<WeeklyWeatherBloc>(context);
-    _weeklyWeatherBloc.add(FetchWeeklyWeatherEvent(cityName: 'eskisehir'));
+    final _weeklyWeatherBloc = locator<WeeklyWeatherBloc>();
 
     return Padding(
         padding: const EdgeInsets.fromLTRB(0, 8, 0, 10),
@@ -26,9 +26,6 @@ class WeeklyWeather extends StatelessWidget {
             child: const ListTile(
               title: Text("Weekly Reports",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
-              trailing: Text("Eskisehir",
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)
-              ),
             ),
           ),
         ),

@@ -9,7 +9,7 @@ import 'package:weather_notify/presentation/pages/weather_page.dart';
 
 import 'data/constants.dart';
 
-void main() {
+Future<void> main() async {
   injectionContainerInit();
   runApp(WeatherNotifyApp());
 }
@@ -21,14 +21,12 @@ class WeatherNotifyApp extends StatefulWidget {
 
 class _WeatherNotifyAppState extends State<WeatherNotifyApp> {
   late SharedPreferences preferences;
+  bool isCitySetted = false;
 
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((sp) {
-      preferences = sp;
-      preferences.setString('city', 'eskisehir');
-    });
+    runOnStart();
   }
 
   @override
@@ -38,33 +36,57 @@ class _WeatherNotifyAppState extends State<WeatherNotifyApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           scaffoldBackgroundColor: AppColors.scaffoldBackground,
-          primarySwatch: Colors.blue
-      ),
+          primarySwatch: Colors.blue),
       home: Scaffold(
-        body: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => WeatherBloc(),
-            ),
-            BlocProvider(
-              create: (context) => HourlyWeatherBloc(),
-            ),
-            BlocProvider(
-              create: (context) => WeeklyWeatherBloc(),
-            ),
-          ],
-          child: WeatherPage(),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: test,
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          child: const Icon(Icons.abc, color: Colors.white, size: 56),
-        ),
+        body: isCitySetted
+            ? MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) => WeatherBloc(),
+                  ),
+                  BlocProvider(
+                    create: (context) => HourlyWeatherBloc(),
+                  ),
+                  BlocProvider(
+                    create: (context) => WeeklyWeatherBloc(),
+                  ),
+                ],
+                child: WeatherPage(),
+              )
+            : Container(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(color: Colors.black)),
       ),
     );
   }
 
-  void test() async {
-
+  void runOnStart() {
+    SharedPreferences.getInstance().then((sp) async {
+      preferences = sp;
+      bool isFirstTime = preferences.getBool('isFirstTime') ?? true;
+      if (isFirstTime) {
+        locator<WeatherBloc>()
+            .add(FetchCurrentWeatherEvent(cityName: 'eskisehir'));
+        locator<WeeklyWeatherBloc>()
+            .add(FetchWeeklyWeatherEvent(cityName: 'eskisehir'));
+        locator<HourlyWeatherBloc>()
+            .add(FetchHourlyWeatherEvent(cityName: 'eskisehir'));
+        setState(() {
+          isCitySetted = true;
+        });
+        preferences.setString('city', 'eskisehir');
+        preferences.setBool('isFirstTime', false);
+      } else {
+        locator<WeatherBloc>().add(
+            FetchCurrentWeatherEvent(cityName: preferences.getString('city')!));
+        locator<WeeklyWeatherBloc>().add(
+            FetchWeeklyWeatherEvent(cityName: preferences.getString('city')!));
+        locator<HourlyWeatherBloc>().add(
+            FetchHourlyWeatherEvent(cityName: preferences.getString('city')!));
+        setState(() {
+          isCitySetted = true;
+        });
+      }
+    });
   }
 }

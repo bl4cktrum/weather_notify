@@ -50,7 +50,7 @@ class WeatherDataSource {
     var baseUrl = Uris.FORECAST_WEATHER_URL;
     var queryParameters = {
       "key": Token.API_TOKEN,
-      "days": "1",
+      "days": "2",
       "q": cityName,
       "aqi": "no",
     };

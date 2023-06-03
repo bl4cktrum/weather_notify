@@ -22,7 +22,7 @@ class WeatherRepository {
   }
 
   Future<CurrentWeather> getCurrentWeatherAsViewModel(String cityName) async {
-    CurrentWeatherModel currentWeatherModel =  await getCurrentWeather(cityName);
+    CurrentWeatherModel currentWeatherModel = await getCurrentWeather(cityName);
     return currentWeatherModel.toCurrentWeather();
   }
 
@@ -36,26 +36,30 @@ class WeatherRepository {
 
   Future<List<DayWeatherWithDate>> getForecastDays(String cityName) async {
     ForecastWeatherModel forecastWeatherModel =
-        await getForecastWeather(cityName);
+    await getForecastWeather(cityName);
     return forecastWeatherModel.forecast!.forecastday!
-        .map((forecastDay) => DayWeatherWithDate(forecastDay.date, forecastDay.day!
-        .toDayWeather()))
+        .map((forecastDay) =>
+        DayWeatherWithDate(forecastDay.date, forecastDay.day!
+            .toDayWeather()))
         .skip(1)
         .toList();
   }
 
   Future<List<HourDetail>> getHourlyWeathersAsViewModel(String cityName) async {
-    HourlyWeather _hourlyWeather = (await getHourlyWeather(cityName)).toHourlyWeather();
+    HourlyWeather _hourlyWeather = (await getHourlyWeather(cityName))
+        .toHourlyWeather();
     List<HourDetail> _hourDetails = [];
-    _hourlyWeather.forecast!.forecastday!.first.hour!
-        .forEach((element) {
-      if (DateTime.now().compareTo(DateTime.parse(element.time!)) < 0) {
-        _hourDetails.add(HourDetail(
-            element.time!,
-            element.condition!.icon!,
-            element.tempC!,
-            element.condition!.code!));
-      };
+    _hourlyWeather.forecast!.forecastday!.forEach((element) {
+      element.hour!
+          .forEach((element) {
+        if (DateTime.now().compareTo(DateTime.parse(element.time!)) < 0) {
+          _hourDetails.add(HourDetail(
+              element.time!,
+              element.condition!.icon!,
+              element.tempC!,
+              element.condition!.code!));
+        };
+      });
     });
     return _hourDetails;
   }

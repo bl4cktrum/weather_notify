@@ -5,7 +5,7 @@ import 'package:weather_notify/data/repositories/WeatherRepository.dart';
 
 final locator = GetIt.instance;
 
-void init() {
+void injectionContainerInit() {
   // Must be first
   locator.registerLazySingleton(() => http.Client());
 

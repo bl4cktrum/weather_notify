@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 import 'package:weather_notify/data/repositories/WeatherRepository.dart';
 import 'package:weather_notify/domain/entities/CurrentWeather.dart';
 import 'package:weather_notify/injection.dart';
@@ -14,6 +15,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
 
   WeatherBloc() : super(CurrentWeatherInitialState()) {
     on<FetchCurrentWeatherEvent>((event, emit) async {
+      debugPrint("event");
       emit(CurrentWeatherLoadingState());
       try {
         CurrentWeather currentWeather = await weatherRepository.getCurrentWeatherAsViewModel(event.cityName);

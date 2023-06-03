@@ -12,7 +12,7 @@ class DailyVisual extends StatelessWidget {
   Widget build(BuildContext context) {
     final _weatherBloc = BlocProvider.of<WeatherBloc>(context);
     _weatherBloc.add(FetchCurrentWeatherEvent(cityName: 'eskisehir'));
-
+// init state
     return BlocBuilder(
       bloc:_weatherBloc,
       builder: (context, WeatherState state) {
@@ -21,7 +21,7 @@ class DailyVisual extends StatelessWidget {
               alignment: Alignment.center,
               child: CircularProgressIndicator(color: Colors.black));
         }
-        if (state is CurrentWeatherLoadedState) {
+        else if (state is CurrentWeatherLoadedState) {
           CurrentWeather currentWeather = state.currentWeather;
           return Card(
             color: AppColors.cardColor,
